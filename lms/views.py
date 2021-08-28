@@ -6,8 +6,13 @@ from .models import *
 # Create your views here.
 
 
-def dashboard():
-    return "Working"
+def dashboard(request):
+    subjects = Subjects.objects.all()
+
+    context = {
+        'subjects': subjects,
+        }
+    return render(request, "dashboard.html", context)
 
 def handleTeacherSignup(request):
     message = ""

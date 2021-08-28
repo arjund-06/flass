@@ -10,4 +10,8 @@ from . import views
 
 urlpatterns = [
     path('', views.dashboard, name="dashboard"),
+    path('/studentSignup', views.handleStudentSignup, name = "studentSignUp"),
+    path('/teacherSignup', views.handleTeacherSignup, name = "teacherSignUp"),
+    path('/login', views.handleLogin, name = "login"),
+    path('/logout', views.handleLogout, name = "logout"),
 ]

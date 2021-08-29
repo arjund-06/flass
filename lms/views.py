@@ -59,7 +59,7 @@ def handleTeacherSignup(request):
         'message': message,
         'alert_type': alert_type
     }
-    return render(request, "signup.html", context)
+    return render(request, "teacherSignup.html", context)
 
 def handleStudentSignup(request):
     message = ""
@@ -106,7 +106,7 @@ def handleStudentSignup(request):
         'message': message,
         'alert_type': alert_type
     }
-    return render(request, "signup.html", context)
+    return render(request, "studentSignup.html", context)
 
 def handleLogin(request):
     message = ""

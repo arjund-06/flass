@@ -7,6 +7,15 @@ from .models import *
 
 
 def dashboard(request):
+    current_user = request.user
+    if not current_user.is_authenticated:
+        return redirect("/login")
+    
+    user_data = getUserType(current_user)
+
+    if user_data[1] == "teacher":
+        print("teach")
+
     subjects = Subjects.objects.all()
 
     context = {
@@ -14,7 +23,45 @@ def dashboard(request):
         }
     return render(request, "dashboard.html", context)
 
+def addSubject(request):
+    current_user = request.user
+    if not current_user.is_authenticated:
+        return redirect("/login")
+    
+    user_data = getUserType(current_user)
+    if(user_data[1] != "teacher"):
+        return redirect("/")
+    
+    if request.method == "POST":
+        sub_name= request.POST['sub_name']
+        subject_id= request.POST['subject_id']
+        enroll_id= "abcdefg"
+
+        newSubject = Subjects(
+            subject_name = sub_name,
+            subject_id = subject_id,
+            enroll_id = enroll_id,
+        )
+        newSubject.save()
+
+        newTeacherSub = Teacher_Subject(
+            teacher_id = user_data[0].teacher_id,
+            subject_id = subject_id,
+        )
+        newTeacherSub.save()
+        print("SUCCESS IN ADD SUB")
+
+        return redirect("/")
+    
+    context = {
+        'user_info': user_data[0],
+    } 
+    return render(request, "addSubject.html", context)
+
 def handleTeacherSignup(request):
+    current_user = request.user
+    if current_user.is_authenticated:
+        return redirect("/")
     message = ""
     alert_type = ""
     valid = True
@@ -62,6 +109,9 @@ def handleTeacherSignup(request):
     return render(request, "teacherSignup.html", context)
 
 def handleStudentSignup(request):
+    current_user = request.user
+    if current_user.is_authenticated:
+        return redirect("/")
     message = ""
     alert_type = ""
     valid = True
@@ -109,6 +159,9 @@ def handleStudentSignup(request):
     return render(request, "studentSignup.html", context)
 
 def handleLogin(request):
+    current_user = request.user
+    if current_user.is_authenticated:
+        return redirect("/")
     message = ""
     alert_type = ""
 
@@ -152,3 +205,14 @@ def handleLogout(request):
     current_user = request.user
     logout(request)
     return redirect("/login")
+
+def getUserType(current_user):
+    if current_user is not None:
+        try:
+            data = Student.objects.get(email = current_user.email)
+            user_type = "student"
+            return [data, user_type]
+        except:
+            data = Teacher.objects.get(email = current_user.email)
+            user_type = "teacher"
+            return [data, user_type]

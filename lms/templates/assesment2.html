@@ -1,0 +1,43 @@
+{% extends "base.html" %} {% block body %}
+
+<div class="container mt-3">
+    <div class="asses my-3">
+        <div class="card w-50 mx-auto" style="width: 40rem;">
+            <div class="row">
+                <div class="col-6 mt-3 ">
+                    <img class="card-img-top" src="CHEMISTRY.png" alt="Card image cap">
+                </div>
+                <div class="col-6 mt-3">
+                    <h4>Teacher Name</h4>
+                </div>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">ClassRoom ----name----</h5>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="t-content" style="padding-top: 2rem;">
+                <div class="card w-50 mx-auto" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">Assesment 1</h5>
+                        <div class="form-group">
+                            <label class="form-label" for="default-06">Pdf Upload</label>
+                            <div class="form-control-wrap">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" name="t-pdf" id="customFile" multiple="multiple">
+                                    <label class="custom-file-label">Choose file</label>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

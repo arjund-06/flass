@@ -1,9 +1,8 @@
-{% extends 'base.html' %}
-{% block body %}
-    <div class="container my-5"  style="border: 2px solid black">
-        <div class="row p-5 mx-auto">
-            <form action="/addSubject" method="POST">
-                {% csrf_token %}
+{% extends 'base.html' %} {% block body %}
+<div class="container my-5" style="border: 2px solid black">
+    <div class="row p-5 mx-auto">
+        <form action="/addSubject" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
             <div class="mb-3">
                 <label for="name" class="form-label">Subject Name:</label>
                 <input type="text" class="form-control" name="sub_name" id="sub_name" placeholder="Enter Subject Name" required>
@@ -13,11 +12,18 @@
                 <label for="subject_id" class="form-label">Subject Id:</label>
                 <input type="text" class="form-control" name="subject_id" id="subject_id" placeholder="Subject Id" required>
             </div>
+            <div class="mb-3">
+                <label for="image" class="form-label">Image:</label>
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" name="picture" id="customFile" multiple="multiple">
+                    <label class="custom-file-label">Choose file</label>
+                </div>
+            </div>
 
             <div style="text-align: center;">
                 <button type="submit" class="btn btn-primary mt-2" id="submit">Add Subject</button>
             </div>
-            </form>
-        </div>
+        </form>
     </div>
+</div>
 {% endblock %}

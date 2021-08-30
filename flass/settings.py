@@ -11,9 +11,11 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+# BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # Quick-start development settings - unsuitable for production
@@ -55,7 +57,7 @@ ROOT_URLCONF = 'flass.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -76,15 +78,16 @@ WSGI_APPLICATION = 'flass.wsgi.application'
 
 DATABASES = {
     'default': {
-        'NAME': 'flippr-X',                             #  *********** ADD THE DATABASE NAME HERE *****************
+        'NAME': 'flippr-X',  # *********** ADD THE DATABASE NAME HERE *****************
         'ENGINE': 'django.db.backends.mysql',
-        'USER': 'root',                             # add any USERID , PASSWORD if you have for your DB
-        'PASSWORD': '',                             
+        # add any USERID , PASSWORD if you have for your DB
+        'USER': 'root',
+        'PASSWORD': '',
         'OPTIONS': {
-        'autocommit': True,
-         
+            'autocommit': True,
+
         },
-        'STORAGE_ENGINE': 'INNODB'  #this
+        'STORAGE_ENGINE': 'INNODB'  # this
     }
 }
 
@@ -126,7 +129,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 

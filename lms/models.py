@@ -23,7 +23,7 @@ class Subjects(models.Model):
     subject_id = models.CharField(
         max_length=10, primary_key=True)  # shown in the slug
     enroll_id = models.CharField(max_length=10, unique=True)
-    picture = models.CharField(max_length=255, default="")
+    picture = models.ImageField(upload_to='lms/image', default="")
 
 
 class Student_Subject(models.Model):

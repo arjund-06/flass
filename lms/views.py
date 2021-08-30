@@ -100,12 +100,14 @@ def joinClass(request):
             subject_to_join = None
 
         if(subject_to_join != None):
-            stu_sub = Student_Subject.objects.get(
-                subject_id=subject_to_join.subject_id)
-            if(stu_sub.student_id == user_data[0].student_id):
-                message = "You are already in this subject"
-                alert_type = "danger"
-                join = False
+            try:
+                stu_sub = Student_Subject.objects.get(subject_id=subject_to_join.subject_id)
+                if(stu_sub.student_id == user_data[0].student_id):
+                    message = "You are already in this subject"
+                    alert_type = "danger"
+                    join = False
+            except:
+                None
 
         if(join):
             newStudentSub = Student_Subject(
@@ -113,7 +115,7 @@ def joinClass(request):
                 student_id=user_data[0].student_id,
             )
             newStudentSub.save()
-            redirect_string = "subject" + str(subject_to_join.subject_id)
+            redirect_string = "subject/" + str(subject_to_join.subject_id)
             return redirect(redirect_string)
 
     context = {

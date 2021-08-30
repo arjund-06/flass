@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block body %}
+    <div class="container my-5"  style="border: 2px solid black">
+        <!-- {% if message != "" %} 
+            {% if alert_type == danger %}
+                <div class="alert alert-danger" role="alert">
+                    {{message}}
+                </div>
+            {% endif %}
+        {% endif %} -->
+
+        <div class="row p-5 mx-auto">
+            <form action="/joinClass" method="POST">
+                {% csrf_token %}
+            <div class="mb-3">
+                <label for="name" class="form-label">Enroll ID:</label>
+                <input type="text" class="form-control" name="enroll_id" id="enroll_id" placeholder="Enter Enroll Id" required>
+            </div>
+
+            <div style="text-align: center;">
+                <button type="submit" class="btn btn-primary mt-2" id="submit">Add Subject</button>
+            </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

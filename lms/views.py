@@ -8,15 +8,22 @@ from .models import *
 
 def dashboard(request):
     current_user = request.user
-    if not current_user.is_authenticated:
+    if(current_user is None and current_user != "admin"):
+        return redirect("/login")
+    if current_user.is_authenticated == False:
         return redirect("/login")
     
     user_data = getUserType(current_user)
 
+    subjects = []
     if user_data[1] == "teacher":
-        print("teach")
-
-    subjects = Subjects.objects.all()
+        sub_arr = Teacher_Subject.objects.filter(teacher_id = user_data[0].teacher_id)
+    elif user_data[1] == "student":
+        sub_arr = Student_Subject.objects.filter(student_id = user_data[0].student_id)
+        
+    for i in sub_arr:
+        print(i.subject_id)
+        subjects.append(Subjects.objects.get(subject_id = i.subject_id))
 
     context = {
         'subjects': subjects,
@@ -25,17 +32,17 @@ def dashboard(request):
 
 def addSubject(request):
     current_user = request.user
-    if not current_user.is_authenticated:
+    if(current_user is None and current_user != "admin"):
+        return redirect("/login")
+    if current_user.is_authenticated == False:
         return redirect("/login")
     
     user_data = getUserType(current_user)
-    if(user_data[1] != "teacher"):
-        return redirect("/")
     
     if request.method == "POST":
         sub_name= request.POST['sub_name']
         subject_id= request.POST['subject_id']
-        enroll_id= "abcdefg"
+        enroll_id= "grapihcs"
 
         newSubject = Subjects(
             subject_name = sub_name,
@@ -57,6 +64,65 @@ def addSubject(request):
         'user_info': user_data[0],
     } 
     return render(request, "addSubject.html", context)
+
+def joinClass(request):
+    message = ""
+    alert_type = ""
+    current_user = request.user
+    print(current_user)
+    if(current_user is None and current_user != "admin"):
+        return redirect("/login")
+    if current_user.is_authenticated == False:
+        return redirect("/login")
+    
+    user_data = getUserType(current_user)
+
+    if(user_data[1] != "student"):
+        return redirect("/")
+    
+    if(request.method == "POST"):
+        enroll_id= request.POST['enroll_id']
+        try:
+            subject_to_join = Subjects.objects.get(enroll_id = enroll_id)
+            join = True
+        except:
+            join = False
+            message = "Invalid Enroll Id. Please try again"
+            alert_type = "danger"
+            subject_to_join = None
+        
+        if(subject_to_join != None):
+            stu_sub = Student_Subject.objects.get(subject_id = subject_to_join.subject_id)
+            if(stu_sub.student_id == user_data[0].student_id):
+                message = "You are already in this subject"
+                alert_type = "danger"
+                join = False           
+
+        if(join):
+            newStudentSub = Student_Subject(
+                subject_id = subject_to_join.subject_id,
+                student_id = user_data[0].student_id,
+            )
+            newStudentSub.save()
+            redirect_string = "subject" + str(subject_to_join.subject_id)
+            return redirect(redirect_string)
+
+    context = {
+        'message': message,
+        'alert_type': alert_type,
+    }
+    return render(request, "joinClass.html")
+
+def showSubject(request, path_sub_id):
+    subject_data = Subjects.objects.get(subject_id = path_sub_id)
+    teacher_sub_rel = Teacher_Subject.objects.get(subject_id = subject_data.subject_id)
+    teacher_data = Teacher.objects.get(teacher_id = teacher_sub_rel.teacher_id)
+
+    context = {
+        'subject': subject_data,
+        'teacher': teacher_data,
+    }
+    return render(request, "assesment1.html", context)
 
 def handleTeacherSignup(request):
     current_user = request.user

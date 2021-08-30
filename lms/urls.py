@@ -13,6 +13,8 @@ urlpatterns = [
     path('studentSignup', views.handleStudentSignup, name = "studentSignUp"),
     path('teacherSignup', views.handleTeacherSignup, name = "teacherSignUp"),
     path('addSubject', views.addSubject, name = "addSubject"),
+    path('joinClass', views.joinClass, name = "joinClass"),
+    path('subject/<str:path_sub_id>', views.showSubject, name = "showSubject"),
     path('login', views.handleLogin, name = "login"),
     path('logout', views.handleLogout, name = "logout"),
 ]

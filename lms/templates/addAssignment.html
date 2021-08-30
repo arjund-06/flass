@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block body %}
+    <div class="container my-5"  style="border: 2px solid black">
+        <div class="row p-5 mx-auto">
+            <form action="/addSubject" method="POST">
+                {% csrf_token %}
+            <div class="mb-3">
+                <label for="name" class="form-label">Assignment Title</label>
+                <input type="text" class="form-control" name="assignment_title" id="assignment_title" placeholder="Enter Assignment title" required>
+            </div>
+
+            <!-- Pdf upload to be added -->
+            <!-- <div class="mb-3">
+                <label for="subject_id" class="form-label">Subject Id:</label>
+                <input type="text" class="form-control" name="subject_id" id="subject_id" placeholder="Subject Id" required>
+            </div> -->
+
+            <div style="text-align: center;">
+                <button type="submit" class="btn btn-primary mt-2" id="submit">Add Subject</button>
+            </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

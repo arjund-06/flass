@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 
 from .models import *
+import random
 # Create your views here.
 
 
@@ -38,11 +39,11 @@ def addSubject(request):
         return redirect("/login")
     
     user_data = getUserType(current_user)
-    
+
     if request.method == "POST":
         sub_name= request.POST['sub_name']
         subject_id= request.POST['subject_id']
-        enroll_id= "grapihcs"
+        enroll_id= makeRandom()
 
         newSubject = Subjects(
             subject_name = sub_name,
@@ -145,8 +146,36 @@ def showSubject(request, path_sub_id):
         'subject': subject_data,
         'teacher': teacher_data,
         'verified': verified,
+        'user_type': user_data[1],
     }
     return render(request, "subject.html", context)
+
+def addAssignment(request, path_sub_id):
+    current_user = request.user
+    if(current_user is None and current_user != "admin"):
+        return redirect("/login")
+    if current_user.is_authenticated == False:
+        return redirect("/login")
+    
+    user_data = getUserType(current_user)
+
+    if(user_data[1] != "teacher"):
+        return redirect("/")
+    
+    if request.method == "POST":
+        assignment_title= request.POST['assignment_title']
+        assignment_id= makeRandom()
+
+        newAssignment = Assignment(
+            assignment_id = assignment_id,
+            assignment_title = assignment_title,
+            assignment_type = "Asi",
+            teacher_id = "user_data[0].teacher_id",
+            subject_id = path_sub_id,
+        )
+        newAssignment.save()
+    
+    return render(request, "addAssignment.html")
 
 def handleTeacherSignup(request):
     current_user = request.user
@@ -306,3 +335,17 @@ def getUserType(current_user):
             data = Teacher.objects.get(email = current_user.email)
             user_type = "teacher"
             return [data, user_type]
+
+def makeRandom():
+    res= ""
+    rand = random.randint(97,122)
+    res = res + str(chr(rand))
+    rand = random.randint(97,122)
+    res = res + str(chr(rand))
+    res = res + str(random.randint(0,9))
+    rand = random.randint(97,122)
+    res = res + str(chr(rand))
+    res = res + str(random.randint(0,9))
+    rand = random.randint(97,122)
+    res = res + str(chr(rand))
+    return res

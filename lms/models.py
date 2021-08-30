@@ -41,7 +41,7 @@ class Assignment(models.Model):
     assignment_id = models.CharField(max_length=6, primary_key=True)
     assignment_title = models.CharField(max_length=35)
     assignment_pdf = models.FileField(null=True)
-    type = models.CharField(max_length=3, choices=TYPE_CHOICE)
+    assignment_type = models.CharField(max_length=3, choices=TYPE_CHOICE)
     teacher_id = models.CharField(max_length=15)
     subject_id = models.CharField(max_length=10)
 

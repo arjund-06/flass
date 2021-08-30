@@ -114,13 +114,37 @@ def joinClass(request):
     return render(request, "joinClass.html")
 
 def showSubject(request, path_sub_id):
+    current_user = request.user
+    if(current_user is None and current_user != "admin"):
+        return redirect("/login")
+    if current_user.is_authenticated == False:
+        return redirect("/login")
+    
+    #data for the subject page
     subject_data = Subjects.objects.get(subject_id = path_sub_id)
     teacher_sub_rel = Teacher_Subject.objects.get(subject_id = subject_data.subject_id)
     teacher_data = Teacher.objects.get(teacher_id = teacher_sub_rel.teacher_id)
 
+    #data to check if user is in the class or not
+    user_data = getUserType(current_user)
+    if(user_data[1] == "student"):
+        student_sub_rel = Student_Subject.objects.filter(subject_id = path_sub_id).filter(student_id = user_data[0].student_id)
+        if(len(student_sub_rel) > 0):
+            verified = True
+        else: 
+            verified = False
+    else:
+        teacher_sub_rel_verify = Teacher_Subject.objects.filter(subject_id = path_sub_id).filter(teacher_id = user_data[0].teacher_id)
+        if(len(teacher_sub_rel_verify) > 0):
+            verified = True
+        else:
+            verified = False
+
+
     context = {
         'subject': subject_data,
         'teacher': teacher_data,
+        'verified': verified,
     }
     return render(request, "assesment1.html", context)
 

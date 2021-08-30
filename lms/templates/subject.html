@@ -1,0 +1,66 @@
+{% extends "base.html" %} {% block body %}
+<!-- Student -->
+{% if verified == True %}
+    <div class="container mt-3">
+        <div class="asses my-3">
+            <div class="card w-50 mx-auto" style="width: 40rem;">
+                <div class="row">
+                    <div class="col-6 mt-3 ">
+                        <img class="card-img-top" src="../static/images/maths.png" alt="Card image cap">
+                    </div>
+                    <div class="col-6 mt-3">
+                        <h2>{{ subject.subject_name }}</h2>
+                        <hr>
+                        <h5 class="card-title">Teacher: {{ teacher.name }}</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="s-content">
+                    <div class="card w-50 mx-auto" style="width: 18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">Assesment 1</h5>
+
+                            <div class="form-group  w-50 mx-auto">
+                                <div class="profile-ud wider">
+                                    <span class="profile-ud-label">Pdf Download</span>
+                                    <span class="profile-ud-value"><a href="consent_letter.pdf" download>file</a></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="s-content">
+                    <div class="card w-50 mx-auto" style="width: 18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">Assesment 1</h5>
+
+                            <div class="form-group  w-50 mx-auto">
+                                <div class="profile-ud wider">
+                                    <span class="profile-ud-label">Pdf Download</span>
+                                    <span class="profile-ud-value"><a href="consent_letter.pdf" download>file</a></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% else %}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h1>Sorry you are not allowed to access this page</h1>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

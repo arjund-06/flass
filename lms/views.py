@@ -146,7 +146,7 @@ def showSubject(request, path_sub_id):
         'teacher': teacher_data,
         'verified': verified,
     }
-    return render(request, "assesment1.html", context)
+    return render(request, "subject.html", context)
 
 def handleTeacherSignup(request):
     current_user = request.user

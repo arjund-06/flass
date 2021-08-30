@@ -3,15 +3,16 @@
 {% if verified == True %}
     <div class="container mt-3">
         <div class="asses my-3">
-            <div class="card w-50 mx-auto" style="width: 40rem;">
+            <div class="card w-50 mx-auto" style="width: 40rem; border: 1px solid black; box-shadow: 1px 2px 4px 1px rgb(59, 59, 59);">
                 <div class="row">
-                    <div class="col-6 mt-3 ">
+                    <div class="col-6 ">
                         <img class="card-img-top" src="../static/images/maths.png" alt="Card image cap">
                     </div>
                     <div class="col-6 mt-3">
                         <h2>{{ subject.subject_name }}</h2>
                         <hr>
-                        <h5 class="card-title">Teacher: {{ teacher.name }}</h5>
+                        <h5 class="">Teacher: {{ teacher.name }}</h5>
+                        <h6 class="">Phone No.: {{ teacher.phone }}</h6>
                     </div>
                 </div>
             </div>

@@ -2,7 +2,7 @@
 {% block body %}
     <div class="container my-5"  style="border: 2px solid black">
         <div class="row p-5 mx-auto">
-            <form action="/addSubject" method="POST">
+            <form action="/addAssignment/{{path_sub_id}}" method="POST">
                 {% csrf_token %}
             <div class="mb-3">
                 <label for="name" class="form-label">Assignment Title</label>

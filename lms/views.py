@@ -115,6 +115,19 @@ def joinClass(request):
                 student_id=user_data[0].student_id,
             )
             newStudentSub.save()
+
+            #checking for existing assignments
+            assignments = Assignment.objects.filter(subject_id = subject_to_join.subject_id)
+            if(len(assignments) > 0):
+                for assignment in assignments:
+                    newAssignmentStudent = Assignment_Student(
+                        student_id= user_data[0].student_id,
+                        assignment_id=assignment.assignment_id,
+                        status= "Not Submitted",
+                        marks= "0",
+                    )
+                    newAssignmentStudent.save()
+
             redirect_string = "subject/" + str(subject_to_join.subject_id)
             return redirect(redirect_string)
 
@@ -147,6 +160,14 @@ def showSubject(request, path_sub_id):
             verified = True
         else:
             verified = False
+        
+        assignments = []
+        if(verified):
+            student_asi_rel = Assignment_Student.objects.filter(student_id = user_data[0].student_id)
+            for student_asi in student_asi_rel:
+                assignment = Assignment.objects.get(assignment_id = student_asi.assignment_id)
+                if(assignment.subject_id == path_sub_id and assignment.assignment_type == "Asi"):
+                    assignments.append(assignment)
     else:
         teacher_sub_rel_verify = Teacher_Subject.objects.filter(
             subject_id=path_sub_id).filter(teacher_id=user_data[0].teacher_id)
@@ -154,12 +175,14 @@ def showSubject(request, path_sub_id):
             verified = True
         else:
             verified = False
+        assignments = []
 
     context = {
         'subject': subject_data,
         'teacher': teacher_data,
         'verified': verified,
         'user_type': user_data[1],
+        'assignments': assignments,
     }
     return render(request, "subject.html", context)
 
@@ -184,12 +207,28 @@ def addAssignment(request, path_sub_id):
             assignment_id=assignment_id,
             assignment_title=assignment_title,
             assignment_type="Asi",
-            teacher_id="user_data[0].teacher_id",
+            teacher_id=user_data[0].teacher_id,
             subject_id=path_sub_id,
         )
         newAssignment.save()
 
-    return render(request, "addAssignment.html")
+        student_sub_rel = Student_Subject.objects.filter(subject_id = path_sub_id)
+        if(len(student_sub_rel) > 0):
+            for stu in student_sub_rel:
+                newAssignmentStudent = Assignment_Student(
+                    student_id= stu.student_id,
+                    assignment_id= assignment_id,
+                    status= "Not Submitted",
+                    marks= "0",
+                )
+                newAssignmentStudent.save()
+        redirect_string = "/subject/" + str(path_sub_id)
+        return redirect(redirect_string)
+    
+    context = {
+        'path_sub_id': path_sub_id
+    }
+    return render(request, "addAssignment.html", context)
 
 
 def handleTeacherSignup(request):

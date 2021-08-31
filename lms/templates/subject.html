@@ -26,12 +26,14 @@
         <a href="/addAssignment/{{subject.subject_id}}">Add Assignment</a>
     </div>
     {% endif %}
+    <h3>Assignments:</h3>
+    {% for assignment in assignments %}
     <div class="row">
         <div class="col-md-12">
             <div class="s-content">
                 <div class="card w-50 mx-auto" style="width: 18rem;">
                     <div class="card-body">
-                        <h5 class="card-title">Assesment 1</h5>
+                        <h5 class="card-title">{{assignment.assignment_title}}</h5>
 
                         <div class="form-group  w-50 mx-auto">
                             <div class="profile-ud wider">
@@ -41,26 +43,27 @@
                         </div>
                     </div>
                 </div>
-
-            </div>
-            <div class="s-content">
-                <div class="card w-50 mx-auto" style="width: 18rem;">
-                    <div class="card-body">
-                        <h5 class="card-title">Assesment 1</h5>
-
-                        <div class="form-group  w-50 mx-auto">
-                            <div class="profile-ud wider">
-                                <span class="profile-ud-label">Pdf Download</span>
-                                <span class="profile-ud-value"><a href="consent_letter.pdf" download>file</a></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </div>
     </div>
+    {% endfor %}
+        
+    <!-- <div class="row">
+        <div class="s-content">
+            <div class="card w-50 mx-auto" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">Assesment 1</h5>
 
+                    <div class="form-group  w-50 mx-auto">
+                        <div class="profile-ud wider">
+                            <span class="profile-ud-label">Pdf Download</span>
+                            <span class="profile-ud-value"><a href="consent_letter.pdf" download>file</a></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
 </div>
 {% else %}
 <div class="container">

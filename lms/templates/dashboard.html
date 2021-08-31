@@ -11,7 +11,7 @@
             <h2 style="text-align: center;">You dont have any classrooms</h2>
         </div>
         {% else %} {% for subject in subjects %}
-        <div class="card col-3 mx-2" style="width: 16rem;">
+        <div class="card col-3 m-2" style="width: 16rem; box-shadow: 1px 2px 2px 1px rgb(34, 34, 34);">
             <img class="card-img-top" src="/media/{{subject.picture}}" alt="Card image cap">
             <div class="card-body">
                 <h5 class="card-title">{{ subject.subject_name }}</h5>

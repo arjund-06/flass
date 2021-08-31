@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 {% block body %}
     <div class="container my-5"  style="border: 2px solid black">
-        <!-- {% if message != "" %} 
+        {% if message != "" %} 
             {% if alert_type == danger %}
                 <div class="alert alert-danger" role="alert">
                     {{message}}
                 </div>
             {% endif %}
-        {% endif %} -->
+        {% endif %}
 
         <div class="row p-5 mx-auto">
             <form action="/joinClass" method="POST">

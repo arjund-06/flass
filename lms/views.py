@@ -246,7 +246,7 @@ def submitAssignment(request, path_asi_id):
         assignment_pdf = request.FILES['assignment_pdf']
 
         student_sub_rel = Assignment_Student.objects.filter(
-            assignment_id=path_asi_id)
+            assignment_id=path_asi_id).filter(student_id = user_data[0].student_id)
         if(len(student_sub_rel) > 0):
             for stu in student_sub_rel:
                 # newAssignmentStudent = Assignment_Student(

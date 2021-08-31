@@ -256,6 +256,7 @@ def submitAssignment(request, path_asi_id):
                 #     marks="0",
                 # )
                 stu.status = 'Submitted'
+                stu.assignment_pdf = assignment_pdf
                 stu.save()
         redirect_string = "/assignment/" + str(path_asi_id)
         return redirect(redirect_string)

@@ -191,7 +191,33 @@ def showSubject(request, path_sub_id):
     }
     return render(request, "subject.html", context)
 
+def showAssignment(request, path_asi_id):
+    current_user = request.user
+    if(current_user is None and current_user != "admin"):
+        return redirect("/login")
+    if current_user.is_authenticated == False:
+        return redirect("/login")
+    
+    user_data = getUserType(current_user)
 
+    assignment_details = Assignment.objects.get(assignment_id = path_asi_id)
+
+    
+    student_asi_rel = Assignment_Student.objects.filter(assignment_id = path_asi_id).filter(student_id = user_data[0].student_id)
+    if(len(student_asi_rel) == 1):
+        for data in student_asi_rel:
+            stu_asi_data = data
+    
+    context = {
+        'assignment': assignment_details,
+        'student_assignment': stu_asi_data,
+        'path_asi_id': path_asi_id,
+    }
+    return render(request, "showAssignment.html", context)
+
+def submitAssignment(request, path_asi_id):
+    return render(request, "submitAssignment.html")
+    
 def addAssignment(request, path_sub_id):
     current_user = request.user
     if(current_user is None and current_user != "admin"):

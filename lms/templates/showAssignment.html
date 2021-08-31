@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block body %}
+
+<div class="container mt-5">
+    <div class="row">
+        <h1>{{assignment.assignment_title}}</h1>
+    </div>
+    <div class="row mt-3">
+        <div class="card" style="width: 90%; border: 1px solid rgb(34, 34, 34);">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-3">
+                        <h4 class="card-title">Assignment Status :</h4>
+                    </div>
+                    <div class="col mt-1">
+                        <h5>{{student_assignment.status}}</h5>
+                    </div> 
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-3">
+                        <h4 class="card-title">Assignment Marks :</h4>
+                    </div>
+                    <div class="col mt-1">
+                        <h5>{{student_assignment.marks}}</h5>
+                    </div> 
+                </div>
+                <hr>
+                <a href="/assignmentSubmission/{{path_asi_id}}" class="btn btn-primary">Add submission</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

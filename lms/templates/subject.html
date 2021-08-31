@@ -1,9 +1,9 @@
 {% extends "base.html" %} {% block body %}
 <!-- Student -->
 {% if verified == True %}
-<div class="container mt-3">
+<div class="container my-3">
     <div class="asses my-3">
-        <div class="card w-50 mx-auto" style="width: 40rem; border: 1px solid black; box-shadow: 1px 2px 4px 1px rgb(59, 59, 59);">
+        <div class="card mx-auto" style="width: 40rem; border: 1px solid black; box-shadow: 1px 2px 4px 1px rgb(59, 59, 59);">
             <div class="row">
                 <div class="col-6 ">
                     <img class="card-img-top" src="/media/{{subject.picture}}" alt="Card image cap">
@@ -21,32 +21,36 @@
             </div>
         </div>
     </div>
-    {% if user_type == "teacher" %}
-    <div class="row">
-        <a href="/addAssignment/{{subject.subject_id}}">Add Assignment</a>
+    <hr>
+    <div class="row mt-2 my-2">
+        <div class="col">
+            <h3 class="">Assignments:</h3>
+        </div>
+        {% if user_type == "teacher" %}
+        <div class="col-md-2">
+            <button class="btn btn-primary"><a href="/addAssignment/{{subject.subject_id}}">Add Assignment</a></button>
+        </div>
+        {% endif %}
+        <div class="col-2"></div>
     </div>
-    {% endif %}
-    <h3>Assignments:</h3>
-    {% for assignment in assignments %}
-    <div class="row">
+    <hr>
+    
+    <div class="row mt-4">
+        {% for assignment in assignments %}
         <div class="col-md-12">
             <div class="s-content">
-                <div class="card w-50 mx-auto" style="width: 18rem;">
+                <div class="card mx-auto" style="width: 35rem; border: 2px solid black;">
                     <div class="card-body">
                         <h5 class="card-title">{{assignment.assignment_title}}</h5>
-
-                        <div class="form-group  w-50 mx-auto">
-                            <div class="profile-ud wider">
-                                <span class="profile-ud-label">Pdf Download</span>
-                                <span class="profile-ud-value"><a href="consent_letter.pdf" download>file</a></span>
-                            </div>
-                        </div>
+                        <span class="profile-ud-label">Pdf Download</span>
+                        <span class="profile-ud-value"><a href="consent_letter.pdf" style="color: black; font-weight: bold;" download>file</a></span>
                     </div>
                 </div>
             </div>
         </div>
+        <hr>
+        {% endfor %}
     </div>
-    {% endfor %}
         
     <!-- <div class="row">
         <div class="s-content">

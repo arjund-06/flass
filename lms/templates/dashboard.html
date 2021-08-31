@@ -3,7 +3,20 @@
 
 <div class="container my-3">
     <div class="row my-2">
-        <h1>Dashboard</h1>
+        <div class="col-3">
+            <h1>Dashboard</h1>
+        </div>
+        <div class="col"></div>
+            {% if user_type == "teacher" %}
+                <div class="col-2">
+                    <button class="btn btn-success my-1"><a href="/addSubject">Add a Subject</a></button>
+                </div>
+            {% endif %}
+            {% if user_type == "student" %}
+                <div class="col-2">
+                    <button class="btn btn-success my-1"><a href="/joinClass">Join a Class</a></button>
+                </div>
+            {% endif %}
     </div>
     <div class="row my-4">
         {% if subjects|length == 0 %}
@@ -11,13 +24,15 @@
             <h2 style="text-align: center;">You dont have any classrooms</h2>
         </div>
         {% else %} {% for subject in subjects %}
-        <div class="card col-3 m-2" style="width: 16rem; box-shadow: 1px 2px 2px 1px rgb(34, 34, 34);">
-            <img class="card-img-top" src="/media/{{subject.picture}}" alt="Card image cap">
-            <div class="card-body">
-                <h5 class="card-title">{{ subject.subject_name }}</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.
-                </p>
-                <a href="/subject/{{ subject.subject_id }}" class="btn btn-primary">Enter Class</a>
+        <div class="col-4 my-2">
+            <div class="card" style="width: inherit; box-shadow: 1px 2px 2px 1px rgb(34, 34, 34);">
+                <img class="card-img-top" src="/media/{{subject.picture}}" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">{{ subject.subject_name }}</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.
+                    </p>
+                    <a href="/subject/{{ subject.subject_id }}" class="btn btn-primary">Enter Class</a>
+                </div>
             </div>
         </div>
         {% endfor %} {% endif %}

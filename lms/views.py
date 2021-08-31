@@ -30,6 +30,7 @@ def dashboard(request):
 
     context = {
         'subjects': subjects,
+        'user_type': user_data[1],
     }
     return render(request, "dashboard.html", context)
 
@@ -176,6 +177,10 @@ def showSubject(request, path_sub_id):
         else:
             verified = False
         assignments = []
+        if(verified):
+            assignment_data = Assignment.objects.filter(subject_id = path_sub_id)
+            for assignment in assignment_data:
+                assignments.append(assignment)
 
     context = {
         'subject': subject_data,

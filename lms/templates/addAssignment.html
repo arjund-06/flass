@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 {% block body %}
-    <div class="container my-5"  style="border: 2px solid black">
-        <div class="row p-5 mx-auto">
-            <form action="/addAssignment/{{path_sub_id}}" method="POST">
-                {% csrf_token %}
+    <div class="container my-5 p-3" style="border: 1px solid black; border-radius: 25px; box-shadow: 2px 2px 4px 1px rgb(35, 35, 35);">
+        <h2 class="my-2" style="text-align: center;">Add an Assignment</h2> 
+        <form action="/addAssignment/{{path_sub_id}}" method="POST">
+            {% csrf_token %}
             <div class="mb-3">
                 <label for="name" class="form-label">Assignment Title</label>
                 <input type="text" class="form-control" name="assignment_title" id="assignment_title" placeholder="Enter Assignment title" required>
@@ -16,9 +16,9 @@
             </div> -->
 
             <div style="text-align: center;">
-                <button type="submit" class="btn btn-primary mt-2" id="submit">Add Subject</button>
+                <button type="button" class="btn btn-danger mt-2" id="cancel"><a href="/subject/{{path_sub_id}}">Cancel</a></button>
+                <button type="submit" class="btn btn-success mt-2" id="submit">Add Assignment</button>
             </div>
-            </form>
-        </div>
+        </form>
     </div>
 {% endblock %}

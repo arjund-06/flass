@@ -7,7 +7,7 @@
 2. Go into the virtual env and pip install -r requirements.txt
 3. It'll install all the required modules for this project to run
 4. Run xampp and type local host in search
-5. Add flipper-x in database
+5. Add flippr-x in database
 6. python manage.py migrate
 7. python manage.py createsuperuser
    - give required details

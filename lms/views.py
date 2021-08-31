@@ -101,7 +101,8 @@ def joinClass(request):
 
         if(subject_to_join != None):
             try:
-                stu_sub = Student_Subject.objects.get(subject_id=subject_to_join.subject_id)
+                stu_sub = Student_Subject.objects.get(
+                    subject_id=subject_to_join.subject_id)
                 if(stu_sub.student_id == user_data[0].student_id):
                     message = "You are already in this subject"
                     alert_type = "danger"
@@ -116,15 +117,16 @@ def joinClass(request):
             )
             newStudentSub.save()
 
-            #checking for existing assignments
-            assignments = Assignment.objects.filter(subject_id = subject_to_join.subject_id)
+            # checking for existing assignments
+            assignments = Assignment.objects.filter(
+                subject_id=subject_to_join.subject_id)
             if(len(assignments) > 0):
                 for assignment in assignments:
                     newAssignmentStudent = Assignment_Student(
-                        student_id= user_data[0].student_id,
+                        student_id=user_data[0].student_id,
                         assignment_id=assignment.assignment_id,
-                        status= "Not Submitted",
-                        marks= "0",
+                        status="Not Submitted",
+                        marks="0",
                     )
                     newAssignmentStudent.save()
 
@@ -164,9 +166,11 @@ def showSubject(request, path_sub_id):
             verified = False
         
         if(verified):
-            student_asi_rel = Assignment_Student.objects.filter(student_id = user_data[0].student_id)
+            student_asi_rel = Assignment_Student.objects.filter(
+                student_id=user_data[0].student_id)
             for student_asi in student_asi_rel:
-                assignment = Assignment.objects.get(assignment_id = student_asi.assignment_id)
+                assignment = Assignment.objects.get(
+                    assignment_id=student_asi.assignment_id)
                 if(assignment.subject_id == path_sub_id and assignment.assignment_type == "Asi"):
                     assignments.append(assignment)
                 elif(assignment.subject_id == path_sub_id and assignment.assignment_type == "Ass"):
@@ -185,7 +189,7 @@ def showSubject(request, path_sub_id):
         else:
             verified = False
         if(verified):
-            assignment_data = Assignment.objects.filter(subject_id = path_sub_id)
+            assignment_data = Assignment.objects.filter(subject_id=path_sub_id)
             for assignment in assignment_data:
                 if(assignment.assignment_type == "Asi"):
                     assignments.append(assignment)
@@ -213,7 +217,7 @@ def showAssignment(request, path_asi_id):
         return redirect("/login")
     if current_user.is_authenticated == False:
         return redirect("/login")
-    
+
     user_data = getUserType(current_user)
     assignment_details = Assignment.objects.get(assignment_id = path_asi_id)
     if(user_data[1] == "student"):
@@ -231,8 +235,37 @@ def showAssignment(request, path_asi_id):
     return render(request, "showAssignment.html", context)
 
 def submitAssignment(request, path_asi_id):
-    return render(request, "submitAssignment.html")
-    
+    current_user = request.user
+    if(current_user is None and current_user != "admin"):
+        return redirect("/login")
+    if current_user.is_authenticated == False:
+        return redirect("/login")
+
+    user_data = getUserType(current_user)
+    if request.method == "POST":
+        assignment_pdf = request.FILES['assignment_pdf']
+
+        student_sub_rel = Assignment_Student.objects.filter(
+            assignment_id=path_asi_id)
+        if(len(student_sub_rel) > 0):
+            for stu in student_sub_rel:
+                # newAssignmentStudent = Assignment_Student(
+                #     student_id=stu.student_id,
+                #     assignment_id=assignment_id,
+                #     status="Not Submitted",
+                #     marks="0",
+                # )
+                stu.status = 'Submitted'
+                stu.save()
+        redirect_string = "/assignment/" + str(path_asi_id)
+        return redirect(redirect_string)
+
+    context = {
+        'path_asi_id': path_asi_id
+    }
+    return render(request, "submitAssignment.html", context)
+
+
 def addAssignment(request, path_sub_id):
     current_user = request.user
     if(current_user is None and current_user != "admin"):
@@ -247,30 +280,33 @@ def addAssignment(request, path_sub_id):
 
     if request.method == "POST":
         assignment_title = request.POST['assignment_title']
+        assignment_pdf = request.FILES['assignment_pdf']
         assignment_id = makeRandom()
 
         newAssignment = Assignment(
             assignment_id=assignment_id,
             assignment_title=assignment_title,
+            assignment_pdf=assignment_pdf,
             assignment_type="Asi",
             teacher_id=user_data[0].teacher_id,
             subject_id=path_sub_id,
         )
         newAssignment.save()
 
-        student_sub_rel = Student_Subject.objects.filter(subject_id = path_sub_id)
+        student_sub_rel = Student_Subject.objects.filter(
+            subject_id=path_sub_id)
         if(len(student_sub_rel) > 0):
             for stu in student_sub_rel:
                 newAssignmentStudent = Assignment_Student(
-                    student_id= stu.student_id,
-                    assignment_id= assignment_id,
-                    status= "Not Submitted",
-                    marks= "0",
+                    student_id=stu.student_id,
+                    assignment_id=assignment_id,
+                    status="Not Submitted",
+                    marks="0",
                 )
                 newAssignmentStudent.save()
         redirect_string = "/subject/" + str(path_sub_id)
         return redirect(redirect_string)
-    
+
     context = {
         'path_sub_id': path_sub_id
     }

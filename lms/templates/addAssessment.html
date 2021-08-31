@@ -2,22 +2,26 @@
 {% block body %}
     <div class="container my-5 p-3" style="border: 1px solid black; border-radius: 25px; box-shadow: 2px 2px 4px 1px rgb(35, 35, 35);">
         <h2 class="my-2" style="text-align: center;">Add an Assessment</h2> 
-        <form action="/addAssessment/{{path_sub_id}}" method="POST">
+        <form action="/addAssignment/{{path_sub_id}}" method="POST">
             {% csrf_token %}
             <div class="mb-3">
                 <label for="name" class="form-label">Assessment Title</label>
-                <input type="text" class="form-control" name="assignment_title" id="assignment_title" placeholder="Enter Assignment title" required>
+                <input type="text" class="form-control" name="assessment_title" id="assessment_title" placeholder="Enter Assessment title" required>
             </div>
 
-            <!-- Pdf upload to be added -->
-            <!-- <div class="mb-3">
-                <label for="subject_id" class="form-label">Subject Id:</label>
-                <input type="text" class="form-control" name="subject_id" id="subject_id" placeholder="Subject Id" required>
-            </div> -->
-
+            <div class="mb-3">
+                <label for="file" class="form-label">Pdf Upload:</label>
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" name="assignment_pdf" id="customFile" multiple="multiple">
+                    <label class="custom-file-label">Choose file</label>
+                </div>
+            </div>
+            <div class="" style="display: none;">
+                <input type="text" name="assignment_type" value = "Ass">
+            </div>
             <div style="text-align: center;">
                 <button type="button" class="btn btn-danger mt-2" id="cancel"><a href="/subject/{{path_sub_id}}">Cancel</a></button>
-                <button type="submit" class="btn btn-success mt-2" id="submit">Add Assignment</button>
+                <button type="submit" class="btn btn-success mt-2" id="submit">Add Assessment</button>
             </div>
         </form>
     </div>

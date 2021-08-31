@@ -261,12 +261,13 @@ def submitAssignment(request, path_asi_id):
         return redirect(redirect_string)
 
     context = {
-        'path_asi_id': path_asi_id
+        'path_asi_id': path_asi_id,
     }
     return render(request, "submitAssignment.html", context)
 
 
 def addAssignment(request, path_sub_id):
+    path = request.path
     current_user = request.user
     if(current_user is None and current_user != "admin"):
         return redirect("/login")
@@ -280,6 +281,7 @@ def addAssignment(request, path_sub_id):
 
     if request.method == "POST":
         assignment_title = request.POST['assignment_title']
+        assignment_type = request.POST['assignment_type']
         assignment_pdf = request.FILES['assignment_pdf']
         assignment_id = makeRandom()
 
@@ -287,7 +289,7 @@ def addAssignment(request, path_sub_id):
             assignment_id=assignment_id,
             assignment_title=assignment_title,
             assignment_pdf=assignment_pdf,
-            assignment_type="Asi",
+            assignment_type=assignment_type,
             teacher_id=user_data[0].teacher_id,
             subject_id=path_sub_id,
         )
@@ -307,8 +309,14 @@ def addAssignment(request, path_sub_id):
         redirect_string = "/subject/" + str(path_sub_id)
         return redirect(redirect_string)
 
+    if(path.startswith("/addAssignment")):
+        name = "Assignment"
+    elif(path.startswith("/addAssessment")):
+        name = "Assesment"
+    
     context = {
-        'path_sub_id': path_sub_id
+        'path_sub_id': path_sub_id,
+        'name': name,
     }
     return render(request, "addAssignment.html", context)
 
@@ -326,11 +334,13 @@ def addAssessment(request, path_sub_id):
 
     if request.method == "POST":
         assessment_title = request.POST['assessment_title']
+        assignment_pdf = request.FILES['assignment_pdf']
         assessment_id = makeRandom()
 
         newAssessment = Assignment(
             assignment_id=assessment_id,
             assignment_title=assessment_title,
+            assignment_pdf=assignment_pdf,
             assignment_type="Ass",
             teacher_id=user_data[0].teacher_id,
             subject_id=path_sub_id,

@@ -14,3 +14,8 @@
 9. python manage.py runserver
 10. Copy the link and /admin and give in the details u gave in createsuperuser
 11. Yayyyy the Application is workinggggg!!!!!!
+
+
+## Tech-Stack 
+- Django
+- Mysql (Database)

@@ -30,6 +30,9 @@
         <div class="col-md-2">
             <button class="btn btn-primary"><a href="/addAssignment/{{subject.subject_id}}">Add Assignment</a></button>
         </div>
+        <div class="col-md-2">
+            <button class="btn btn-primary"><a href="/addAssessment/{{subject.subject_id}}">Add Assessment</a></button>
+        </div>
         {% endif %}
         <div class="col-2"></div>
     </div>
@@ -57,23 +60,34 @@
         <hr>
         {% endfor %}
     </div>
-        
-    <!-- <div class="row">
-        <div class="s-content">
-            <div class="card w-50 mx-auto" style="width: 18rem;">
+    <hr>
+    <div class="row my-2">
+        <div class="col">
+            <h4 class="">Assessments:</h4>
+        </div>
+    </div>
+    <div class="row mt-4">
+        {% for assessment in assessments %}
+        <div class="col-md-6">
+            <div class="card mx-auto" style=" border: 1px solid black; border-radius: 15px;">
                 <div class="card-body">
-                    <h5 class="card-title">Assesment 1</h5>
-
-                    <div class="form-group  w-50 mx-auto">
-                        <div class="profile-ud wider">
-                            <span class="profile-ud-label">Pdf Download</span>
-                            <span class="profile-ud-value"><a href="consent_letter.pdf" download>file</a></span>
+                    <div class="row">
+                        <div class="col mt-1">
+                            <h6>{{ forloop.counter }}</h6>
+                        </div>
+                        <div class="col-5">
+                            <h5 class="card-title">{{assessment.assignment_title}}</h5>
+                        </div>
+                        <div class="col-6">
+                            <button class="btn btn-primary"><a href="/assessment/{{assessment.assignment_id}}">View Assessment</a></button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div> -->
+        <hr>
+        {% endfor %}
+    </div>
 </div>
 {% else %}
 <div class="container">

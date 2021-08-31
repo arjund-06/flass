@@ -23,7 +23,7 @@ class Subjects(models.Model):
     subject_id = models.CharField(
         max_length=10, primary_key=True)  # shown in the slug
     enroll_id = models.CharField(max_length=10, unique=True)
-    picture = models.CharField(max_length=255, default="")
+    picture = models.ImageField(upload_to='lms/image', default="")
 
 
 class Student_Subject(models.Model):
@@ -41,9 +41,10 @@ class Assignment(models.Model):
     assignment_id = models.CharField(max_length=6, primary_key=True)
     assignment_title = models.CharField(max_length=35)
     assignment_pdf = models.FileField(null=True)
-    type = models.CharField(max_length=3, choices=TYPE_CHOICE)
+    assignment_type = models.CharField(max_length=3, choices=TYPE_CHOICE)
     teacher_id = models.CharField(max_length=15)
     subject_id = models.CharField(max_length=10)
+    submission_date = models.DateTimeField(auto_now=True)
 
 
 class Assignment_Student(models.Model):
@@ -51,3 +52,5 @@ class Assignment_Student(models.Model):
     assignment_id = models.CharField(max_length=6)
     status = models.CharField(max_length=25)
     marks = models.IntegerField()
+    assignment_pdf = models.FileField(null=True)
+    submitted_at = models.DateTimeField(null=True)

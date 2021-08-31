@@ -1,23 +1,29 @@
-{% extends 'base.html' %}
-{% block body %}
-    <div class="container my-5"  style="border: 2px solid black">
-        <div class="row p-5 mx-auto">
-            <form action="/addSubject" method="POST">
-                {% csrf_token %}
-            <div class="mb-3">
-                <label for="name" class="form-label">Subject Name:</label>
-                <input type="text" class="form-control" name="sub_name" id="sub_name" placeholder="Enter Subject Name" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="subject_id" class="form-label">Subject Id:</label>
-                <input type="text" class="form-control" name="subject_id" id="subject_id" placeholder="Subject Id" required>
-            </div>
-
-            <div style="text-align: center;">
-                <button type="submit" class="btn btn-primary mt-2" id="submit">Add Subject</button>
-            </div>
-            </form>
+{% extends 'base.html' %} {% block body %}
+<div class="container my-5 p-3" style="border: 1px solid black; border-radius: 25px; box-shadow: 2px 2px 4px 1px rgb(35, 35, 35);">
+    <h2 class="my-2" style="text-align: center;">Add a Subject</h2> 
+    <form action="/addSubject" method="POST" style="max-width:70%;" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="name" class="form-label">Subject Name:</label>
+            <input type="text" class="form-control" name="sub_name" id="sub_name" placeholder="Enter Subject Name" required>
         </div>
-    </div>
+
+        <div class="mb-3">
+            <label for="subject_id" class="form-label">Subject Id:</label>
+            <input type="text" class="form-control" name="subject_id" id="subject_id" placeholder="Subject Id" required>
+        </div>
+        <div class="mb-3">
+            <label for="image" class="form-label">Image:</label>
+            <div class="custom-file">
+                <input type="file" class="custom-file-input" name="picture" id="customFile" multiple="multiple">
+                <label class="custom-file-label">Choose file</label>
+            </div>
+        </div>
+
+        <div style="text-align: center;">
+            <button type="button" class="btn btn-danger mt-2" id="cancel"><a href="/">Cancel</a></button>
+            <button type="submit" class="btn btn-success mt-2" id="submit">Add Subject</button>
+        </div>
+    </form>
+</div>
 {% endblock %}

@@ -30,6 +30,7 @@
         <div class="col-md-2">
             <button class="btn btn-primary"><a href="/addAssignment/{{subject.subject_id}}">Add Assignment</a></button>
         </div>
+        <div class="col-md-1"></div>
         <div class="col-md-2">
             <button class="btn btn-primary"><a href="/addAssessment/{{subject.subject_id}}">Add Assessment</a></button>
         </div>
@@ -37,7 +38,7 @@
         <div class="col-2"></div>
     </div>
     <hr>
-    
+
     <div class="row mt-4">
         {% for assignment in assignments %}
         <div class="col-md-6">
@@ -51,14 +52,14 @@
                             <h5 class="card-title">{{assignment.assignment_title}}</h5>
                         </div>
                         <div class="col-6">
-                            <button class="btn btn-primary"><a href="/assignment/{{assignment.assignment_id}}">View Assignment</a></button>
+                            <button class="btn btn-primary"><a href="/assignment/{{assignment.assignment_id}}">View
+                                    Assignment</a></button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <hr>
-        {% endfor %}
+        <hr> {% endfor %}
     </div>
     <hr>
     <div class="row my-2">
@@ -79,14 +80,14 @@
                             <h5 class="card-title">{{assessment.assignment_title}}</h5>
                         </div>
                         <div class="col-6">
-                            <button class="btn btn-primary"><a href="/assignment/{{assessment.assignment_id}}">View Assessment</a></button>
+                            <button class="btn btn-primary"><a href="/assignment/{{assessment.assignment_id}}">View
+                                    Assessment</a></button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <hr>
-        {% endfor %}
+        <hr> {% endfor %}
     </div>
 </div>
 {% else %}

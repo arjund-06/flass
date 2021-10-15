@@ -34,7 +34,6 @@ def dashboard(request):
     }
     return render(request, "dashboard.html", context)
 
-
 def addSubject(request):
     current_user = request.user
     if(current_user is None and current_user != "admin"):
@@ -150,6 +149,8 @@ def showSubject(request, path_sub_id):
 
     # data for the subject page
     subject_data = Subjects.objects.get(subject_id=path_sub_id)
+    assignments = []
+    assessments = []
     teacher_sub_rel = Teacher_Subject.objects.get(
         subject_id=subject_data.subject_id)
     teacher_data = Teacher.objects.get(teacher_id=teacher_sub_rel.teacher_id)
@@ -163,8 +164,7 @@ def showSubject(request, path_sub_id):
             verified = True
         else:
             verified = False
-
-        assignments = []
+        
         if(verified):
             student_asi_rel = Assignment_Student.objects.filter(
                 student_id=user_data[0].student_id)
@@ -173,6 +173,14 @@ def showSubject(request, path_sub_id):
                     assignment_id=student_asi.assignment_id)
                 if(assignment.subject_id == path_sub_id and assignment.assignment_type == "Asi"):
                     assignments.append(assignment)
+                elif(assignment.subject_id == path_sub_id and assignment.assignment_type == "Ass"):
+                    assessments.append(assignment)
+
+            # student_asi_rel = Assignment_Student.objects.filter(student_id = user_data[0].student_id)
+            # for student_asi in student_asi_rel:
+            #     assessment = Assignment.objects.get(assignment_id = student_asi.assignment_id)
+            #     if(assignment.subject_id == path_sub_id and assignment.assignment_type == "Ass"):
+            #         assessments.append(assessment)
     else:
         teacher_sub_rel_verify = Teacher_Subject.objects.filter(
             subject_id=path_sub_id).filter(teacher_id=user_data[0].teacher_id)
@@ -180,11 +188,18 @@ def showSubject(request, path_sub_id):
             verified = True
         else:
             verified = False
-        assignments = []
         if(verified):
             assignment_data = Assignment.objects.filter(subject_id=path_sub_id)
             for assignment in assignment_data:
-                assignments.append(assignment)
+                if(assignment.assignment_type == "Asi"):
+                    assignments.append(assignment)
+                elif(assignment.assignment_type == "Ass"):
+                    assessments.append(assignment)
+
+            # assignment_data = Assignment.objects.filter(subject_id = path_sub_id)
+            # for assessment in assignment_data:
+            #     if(assignment.assignment_type == "Ass"):
+            #         assessments.append(assessment)
 
     context = {
         'subject': subject_data,
@@ -192,9 +207,9 @@ def showSubject(request, path_sub_id):
         'verified': verified,
         'user_type': user_data[1],
         'assignments': assignments,
+        'assessments': assessments,
     }
     return render(request, "subject.html", context)
-
 
 def showAssignment(request, path_asi_id):
     current_user = request.user
@@ -204,22 +219,20 @@ def showAssignment(request, path_asi_id):
         return redirect("/login")
 
     user_data = getUserType(current_user)
-
-    assignment_details = Assignment.objects.get(assignment_id=path_asi_id)
-
-    student_asi_rel = Assignment_Student.objects.filter(
-        assignment_id=path_asi_id).filter(student_id=user_data[0].student_id)
-    if(len(student_asi_rel) == 1):
-        for data in student_asi_rel:
-            stu_asi_data = data
-
+    assignment_details = Assignment.objects.get(assignment_id = path_asi_id)
+    if(user_data[1] == "student"):
+        stu_asi_rel = Assignment_Student.objects.filter(assignment_id = path_asi_id).filter(student_id = user_data[0].student_id)
+        
+    elif(user_data[1] == "teacher"):
+        stu_asi_rel = Assignment_Student.objects.filter(assignment_id = path_asi_id)
+        
     context = {
-        'assignment': assignment_details,
-        'student_assignment': stu_asi_data,
-        'path_asi_id': path_asi_id,
+    'assignment': assignment_details,
+    'student_assignment': stu_asi_rel,
+    'path_asi_id': path_asi_id,
+    'user_type': user_data[1],
     }
     return render(request, "showAssignment.html", context)
-
 
 def submitAssignment(request, path_asi_id):
     current_user = request.user
@@ -233,7 +246,7 @@ def submitAssignment(request, path_asi_id):
         assignment_pdf = request.FILES['assignment_pdf']
 
         student_sub_rel = Assignment_Student.objects.filter(
-            assignment_id=path_asi_id)
+            assignment_id=path_asi_id).filter(student_id = user_data[0].student_id)
         if(len(student_sub_rel) > 0):
             for stu in student_sub_rel:
                 # newAssignmentStudent = Assignment_Student(
@@ -243,17 +256,19 @@ def submitAssignment(request, path_asi_id):
                 #     marks="0",
                 # )
                 stu.status = 'Submitted'
+                stu.assignment_pdf = assignment_pdf
                 stu.save()
         redirect_string = "/assignment/" + str(path_asi_id)
         return redirect(redirect_string)
 
     context = {
-        'path_asi_id': path_asi_id
+        'path_asi_id': path_asi_id,
     }
     return render(request, "submitAssignment.html", context)
 
 
 def addAssignment(request, path_sub_id):
+    path = request.path
     current_user = request.user
     if(current_user is None and current_user != "admin"):
         return redirect("/login")
@@ -267,6 +282,7 @@ def addAssignment(request, path_sub_id):
 
     if request.method == "POST":
         assignment_title = request.POST['assignment_title']
+        assignment_type = request.POST['assignment_type']
         assignment_pdf = request.FILES['assignment_pdf']
         assignment_id = makeRandom()
 
@@ -274,7 +290,7 @@ def addAssignment(request, path_sub_id):
             assignment_id=assignment_id,
             assignment_title=assignment_title,
             assignment_pdf=assignment_pdf,
-            assignment_type="Asi",
+            assignment_type=assignment_type,
             teacher_id=user_data[0].teacher_id,
             subject_id=path_sub_id,
         )
@@ -294,11 +310,61 @@ def addAssignment(request, path_sub_id):
         redirect_string = "/subject/" + str(path_sub_id)
         return redirect(redirect_string)
 
+    if(path.startswith("/addAssignment")):
+        name = "Assignment"
+    elif(path.startswith("/addAssessment")):
+        name = "Assesment"
+    
     context = {
-        'path_sub_id': path_sub_id
+        'path_sub_id': path_sub_id,
+        'name': name,
     }
     return render(request, "addAssignment.html", context)
 
+def addAssessment(request, path_sub_id):
+    current_user = request.user
+    if(current_user is None and current_user != "admin"):
+        return redirect("/login")
+    if current_user.is_authenticated == False:
+        return redirect("/login")
+
+    user_data = getUserType(current_user)
+
+    if(user_data[1] != "teacher"):
+        return redirect("/")
+
+    if request.method == "POST":
+        assessment_title = request.POST['assessment_title']
+        assignment_pdf = request.FILES['assignment_pdf']
+        assessment_id = makeRandom()
+
+        newAssessment = Assignment(
+            assignment_id=assessment_id,
+            assignment_title=assessment_title,
+            assignment_pdf=assignment_pdf,
+            assignment_type="Ass",
+            teacher_id=user_data[0].teacher_id,
+            subject_id=path_sub_id,
+        )
+        newAssessment.save()
+
+        student_sub_rel = Student_Subject.objects.filter(subject_id = path_sub_id)
+        if(len(student_sub_rel) > 0):
+            for stu in student_sub_rel:
+                newAssignmentStudent = Assignment_Student(
+                    student_id= stu.student_id,
+                    assignment_id= assessment_id,
+                    status= "Not Submitted",
+                    marks= "0",
+                )
+                newAssignmentStudent.save()
+        redirect_string = "/subject/" + str(path_sub_id)
+        return redirect(redirect_string)
+    
+    context = {
+        'path_sub_id': path_sub_id
+    }
+    return render(request, "addAssessment.html", context)
 
 def handleTeacherSignup(request):
     current_user = request.user

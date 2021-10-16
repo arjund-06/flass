@@ -31,11 +31,7 @@
             <button class="btn btn-primary"><a href="/addAssignment/{{subject.subject_id}}">Add Assignment</a></button>
         </div>
         <div class="col-md-1"></div>
-        <div class="col-md-2">
-            <button class="btn btn-primary"><a href="/addAssessment/{{subject.subject_id}}">Add Assessment</a></button>
-        </div>
         {% endif %}
-        <div class="col-2"></div>
     </div>
     <hr>
 
@@ -66,6 +62,12 @@
         <div class="col">
             <h4 class="">Assessments:</h4>
         </div>
+        {% if user_type == "teacher" %}
+        <div class="col-md-2">
+            <button class="btn btn-primary"><a href="/addAssessment/{{subject.subject_id}}">Add Assessment</a></button>
+        </div>
+        <div class="col-md-1"></div>
+        {% endif %}
     </div>
     <div class="row mt-4">
         {% for assessment in assessments %}
